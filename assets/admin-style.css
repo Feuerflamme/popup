@@ -1,0 +1,38 @@
+/* No Bloat Popups – Admin */
+
+.nbp-form-table {
+    margin-top: 0;
+}
+
+.nbp-form-table th {
+    width: 200px;
+    padding-top: 15px;
+}
+
+.nbp-form-table td {
+    padding-top: 15px;
+}
+
+.nbp-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.nbp-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.nbp-image-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.nbp-image-upload img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}

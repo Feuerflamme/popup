@@ -4,14 +4,14 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 	exit;
 }
 
-$sliders = get_posts([
-	'post_type' => 'tp_slider',
+// Alle Popups und zugehörige Meta-Daten löschen
+$popups = get_posts([
+	'post_type'   => 'nbp_popup',
 	'post_status' => 'any',
 	'numberposts' => -1,
-	'fields' => 'ids'
+	'fields'      => 'ids',
 ]);
 
-foreach ($sliders as $slider_id) {
-	delete_post_meta($slider_id, '_tp_slider_images');
-	delete_post_meta($slider_id, '_tp_slider_bullets');
+foreach ($popups as $popup_id) {
+	wp_delete_post($popup_id, true);
 }

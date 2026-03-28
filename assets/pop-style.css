@@ -1,0 +1,248 @@
+/* No Bloat Popups – Standard Announcement Design */
+
+/* ── Overlay ── */
+
+.nbp-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.55);
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+/* ── Container (Card) ── */
+
+.nbp-popup-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 12px;
+    max-width: 560px;
+    width: 100%;
+    max-height: calc(100vh - 60px);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+    animation: nbp-slide-in 0.35s ease-out;
+}
+
+@keyframes nbp-slide-in {
+    from {
+        transform: translateY(20px) scale(0.97);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* ── Close Button ── */
+
+.nbp-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    cursor: pointer;
+    color: #555;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+    transition: background-color 0.2s, color 0.2s;
+    z-index: 2;
+}
+
+.nbp-close:hover,
+.nbp-close:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #111;
+    outline: none;
+}
+
+.nbp-close__icon {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.nbp-close__text {
+    display: none;
+}
+
+/* ── Content Area ── */
+
+.nbp-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+/* Custom Scrollbar (Webkit) */
+
+.nbp-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.nbp-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nbp-content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+.nbp-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* ── Image (full-width top) ── */
+
+.nbp-image {
+    margin: 0;
+    line-height: 0;
+}
+
+.nbp-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+/* ── Text Content (padded area below image) ── */
+
+.nbp-headline {
+    color: var(--nbp-headline-color, #111);
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    padding: 28px 28px 0 28px;
+}
+
+.nbp-subheadline {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+    font-weight: 400;
+    padding: 0 28px;
+}
+
+.nbp-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #444;
+    padding: 0 28px;
+    margin-bottom: 0;
+}
+
+.nbp-text p {
+    margin: 0 0 12px 0;
+}
+
+.nbp-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* ── Button ── */
+
+.nbp-button-wrap {
+    padding: 24px 28px 28px 28px;
+}
+
+.nbp-popup .btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* ── Custom HTML ── */
+
+.nbp-custom {
+    padding: 0 28px 28px 28px;
+}
+
+/* ── Body Lock ── */
+
+body.nbp-popup-active {
+    overflow: hidden;
+}
+
+/* ── Responsive ── */
+
+@media (min-width: 768px) {
+    .nbp-headline {
+        font-size: 26px;
+        padding: 32px 36px 0 36px;
+    }
+
+    .nbp-subheadline {
+        font-size: 16px;
+        padding: 0 36px;
+    }
+
+    .nbp-text {
+        padding: 0 36px;
+    }
+
+    .nbp-button-wrap {
+        padding: 28px 36px 36px 36px;
+    }
+
+    .nbp-custom {
+        padding: 0 36px 36px 36px;
+    }
+
+    .nbp-image img {
+        max-height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nbp-popup {
+        padding: 12px;
+    }
+
+    .nbp-popup-container {
+        border-radius: 10px;
+    }
+
+    .nbp-headline {
+        font-size: 19px;
+        padding: 24px 20px 0 20px;
+    }
+
+    .nbp-subheadline {
+        padding: 0 20px;
+    }
+
+    .nbp-text {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .nbp-button-wrap {
+        padding: 20px;
+    }
+
+    .nbp-custom {
+        padding: 0 20px 20px 20px;
+    }
+}

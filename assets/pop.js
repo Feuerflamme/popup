@@ -136,7 +136,7 @@
 
   function bindCloseEvents(el) {
     // Close button
-    var closeBtn = el.querySelector(".nbp-close");
+    var closeBtn = el.querySelector(".close");
     if (closeBtn) {
       closeBtn.addEventListener("click", function () {
         hidePopup(el);

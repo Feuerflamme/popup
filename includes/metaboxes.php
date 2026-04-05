@@ -28,21 +28,20 @@ function nbp_get_meta($post_id, $key, $default = '') {
 
 /* ── Default CSS Values ── */
 function nbp_default_css($popup_id = 0) {
-    $s = '.nbp-popup-' . intval($popup_id);
     return [
         'overlay' =>
-"background-color: rgba(0, 0, 0, 0.55);
-padding: 20px;",
+"background-color: rgba(0, 0, 0, 0.8);
+padding: 20px 0;",
 
         'container' =>
 "background-color: #fff;
-border-radius: 12px;
-max-width: 560px;
-box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);",
+max-width: 980px;
+padding: 2em;
+position: relative;",
 
         'close' =>
-"color: #555;
-background: rgba(0, 0, 0, 0.05);",
+"font-size: 40px;
+color: inherit;",
 
         'image' =>
 "width: 100%;
@@ -50,31 +49,32 @@ height: auto;
 object-fit: contain;",
 
         'headline' =>
-"color: #111;
-font-size: 22px;
-line-height: 1.3;
-font-weight: 700;
-padding: 28px 28px 0 28px;
-margin: 0 0 8px 0;",
+"font-weight: 900;
+line-height: 1.2;
+text-transform: uppercase;
+text-align: left;
+padding: 20px 0 0 0;
+margin: 0;",
 
         'subheadline' =>
-"color: #666;
-font-size: 15px;
-line-height: 1.5;
-font-weight: 400;
-padding: 0 28px;
+"font-weight: 700;
+line-height: 1.3;
+text-align: left;
 margin: 0 0 16px 0;",
 
         'text' =>
-"font-size: 15px;
-line-height: 1.65;
-color: #444;
-padding: 0 28px;",
+"text-align: left;
+line-height: 1.4;",
 
         'button' =>
-"display: block;
-width: 100%;
-text-align: center;",
+"width: max-content;
+margin-top: 15px;",
+
+        'stoerer' =>
+"background-color: hsl(57, 86%, 63%);
+padding: 40px;
+font-weight: 900;
+font-size: 22px;",
     ];
 }
 
@@ -162,6 +162,8 @@ function nbp_content_callback($post) {
     $css_text      = nbp_get_meta($post->ID, 'css_text',      $defaults['text']);
     $css_button    = nbp_get_meta($post->ID, 'css_button',    $defaults['button']);
     $css_close     = nbp_get_meta($post->ID, 'css_close',     $defaults['close']);
+    $stoerer_text  = nbp_get_meta($post->ID, 'stoerer_text');
+    $css_stoerer   = nbp_get_meta($post->ID, 'css_stoerer',   $defaults['stoerer'] ?? '');
     ?>
     <table class="form-table nbp-form-table">
         <tr>
@@ -175,14 +177,14 @@ function nbp_content_callback($post) {
             <th><label for="nbp_css_container">Container CSS</label></th>
             <td>
                 <textarea id="nbp_css_container" name="nbp_css_container" rows="4" class="large-text code"><?php echo esc_textarea($css_container); ?></textarea>
-                <p class="description">CSS für die Popup-Karte <code>.nbp-popup-<?php echo $pid; ?> .nbp-popup-container</code></p>
+                <p class="description">CSS für die Popup-Karte <code>.nbp-popup-<?php echo $pid; ?> .container</code></p>
             </td>
         </tr>
         <tr>
             <th><label for="nbp_css_close">Close-Button CSS</label></th>
             <td>
                 <textarea id="nbp_css_close" name="nbp_css_close" rows="3" class="large-text code"><?php echo esc_textarea($css_close); ?></textarea>
-                <p class="description">CSS für den Schließen-Button <code>.nbp-popup-<?php echo $pid; ?> .nbp-close</code></p>
+                <p class="description">CSS für den Schließen-Button <code>.nbp-popup-<?php echo $pid; ?> .close</code></p>
             </td>
         </tr>
         <tr>
@@ -217,7 +219,7 @@ function nbp_content_callback($post) {
             <th><label for="nbp_css_headline">Headline CSS</label></th>
             <td>
                 <textarea id="nbp_css_headline" name="nbp_css_headline" rows="3" class="large-text code"><?php echo esc_textarea($css_headline); ?></textarea>
-                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .nbp-headline</code></p>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .headline-2</code></p>
             </td>
         </tr>
         <tr>
@@ -246,7 +248,7 @@ function nbp_content_callback($post) {
             <th><label for="nbp_css_text">Text CSS</label></th>
             <td>
                 <textarea id="nbp_css_text" name="nbp_css_text" rows="3" class="large-text code"><?php echo esc_textarea($css_text); ?></textarea>
-                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .nbp-text</code></p>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .text</code></p>
             </td>
         </tr>
         <tr>
@@ -270,7 +272,21 @@ function nbp_content_callback($post) {
             <th><label for="nbp_css_button">Button CSS</label></th>
             <td>
                 <textarea id="nbp_css_button" name="nbp_css_button" rows="3" class="large-text code"><?php echo esc_textarea($css_button); ?></textarea>
-                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .btn</code></p>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .button.btn</code></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_stoerer_text">Störer (optional)</label></th>
+            <td>
+                <textarea id="nbp_stoerer_text" name="nbp_stoerer_text" rows="4" class="large-text"><?php echo esc_textarea($stoerer_text); ?></textarea>
+                <p class="description">HTML für den Störer-Badge (z.B. Datum, kurze Infos). Leer lassen = kein Störer. HTML erlaubt.</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_stoerer">Störer CSS</label></th>
+            <td>
+                <textarea id="nbp_css_stoerer" name="nbp_css_stoerer" rows="3" class="large-text code"><?php echo esc_textarea($css_stoerer); ?></textarea>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .stoerer</code></p>
             </td>
         </tr>
         <tr>
@@ -445,6 +461,8 @@ function nbp_save_meta($post_id, $post) {
         'css_subheadline'  => 'wp_strip_all_tags',
         'css_text'         => 'wp_strip_all_tags',
         'css_button'       => 'wp_strip_all_tags',
+        'stoerer_text'     => 'wp_kses_post',
+        'css_stoerer'      => 'wp_strip_all_tags',
     ];
 
     // Checkboxes (missing = unchecked = 0)

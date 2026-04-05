@@ -60,6 +60,7 @@ function nbp_render_popups() {
         $button_url    = get_post_meta($id, '_nbp_button_url', true);
         $button_target = get_post_meta($id, '_nbp_button_target', true) ?: '_self';
         $custom_html   = get_post_meta($id, '_nbp_custom_html', true);
+        $stoerer_text  = get_post_meta($id, '_nbp_stoerer_text', true);
 
         // Per-element CSS
         $defaults = nbp_default_css($id);
@@ -71,16 +72,18 @@ function nbp_render_popups() {
         $css_subheadline = get_post_meta($id, '_nbp_css_subheadline', true) ?: $defaults['subheadline'];
         $css_text        = get_post_meta($id, '_nbp_css_text', true)        ?: $defaults['text'];
         $css_button      = get_post_meta($id, '_nbp_css_button', true)      ?: $defaults['button'];
+        $css_stoerer     = get_post_meta($id, '_nbp_css_stoerer', true)     ?: $defaults['stoerer'];
 
         $s = '.nbp-popup-' . intval($id);
         $inline_css  = $s . ' { ' . wp_strip_all_tags($css_overlay) . ' } ';
-        $inline_css .= $s . ' .nbp-popup-container { ' . wp_strip_all_tags($css_container) . ' } ';
-        $inline_css .= $s . ' .nbp-close { ' . wp_strip_all_tags($css_close) . ' } ';
+        $inline_css .= $s . ' .container { ' . wp_strip_all_tags($css_container) . ' } ';
+        $inline_css .= $s . ' .close { ' . wp_strip_all_tags($css_close) . ' } ';
         $inline_css .= $s . ' .nbp-image img { ' . wp_strip_all_tags($css_image) . ' } ';
-        $inline_css .= $s . ' .nbp-headline { ' . wp_strip_all_tags($css_headline) . ' } ';
+        $inline_css .= $s . ' .headline-2 { ' . wp_strip_all_tags($css_headline) . ' } ';
         $inline_css .= $s . ' .nbp-subheadline { ' . wp_strip_all_tags($css_subheadline) . ' } ';
-        $inline_css .= $s . ' .nbp-text { ' . wp_strip_all_tags($css_text) . ' } ';
-        $inline_css .= $s . ' .btn { ' . wp_strip_all_tags($css_button) . ' } ';
+        $inline_css .= $s . ' .text { ' . wp_strip_all_tags($css_text) . ' } ';
+        $inline_css .= $s . ' .button.btn { ' . wp_strip_all_tags($css_button) . ' } ';
+        $inline_css .= $s . ' .stoerer { ' . wp_strip_all_tags($css_stoerer) . ' } ';
 
         echo '<style>' . $inline_css . '</style>';
         ?>
@@ -90,45 +93,44 @@ function nbp_render_popups() {
              role="dialog"
              aria-modal="true"
              aria-label="<?php echo esc_attr($headline ?: $popup->post_title); ?>">
-            <div class="nbp-popup-container">
-                <button type="button" class="nbp-close" aria-label="Fenster schließen">
-                    <span class="nbp-close__icon" aria-hidden="true">&times;</span>
-                    <span class="nbp-close__text">Close</span>
-                </button>
-                <div class="nbp-content">
-                    <?php if ($image): ?>
-                        <div class="nbp-image">
-                            <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($headline ?: ''); ?>">
-                        </div>
-                    <?php endif; ?>
+            <div class="container">
+                <button type="button" class="close" aria-label="Fenster schließen" tabindex="0">X</button>
 
-                    <?php if ($headline): ?>
-                        <h2 class="nbp-headline"><?php echo esc_html($headline); ?></h2>
-                    <?php endif; ?>
+                <?php if ($image): ?>
+                    <div class="nbp-image">
+                        <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($headline ?: ''); ?>">
+                    </div>
+                <?php endif; ?>
 
-                    <?php if ($subheadline): ?>
-                        <h3 class="nbp-subheadline"><?php echo esc_html($subheadline); ?></h3>
-                    <?php endif; ?>
+                <?php if ($headline): ?>
+                    <h2 class="headline-2"><?php echo wp_kses_post($headline); ?></h2>
+                <?php endif; ?>
 
-                    <?php if ($text): ?>
-                        <div class="nbp-text"><?php echo wp_kses_post($text); ?></div>
-                    <?php endif; ?>
+                <?php if ($subheadline): ?>
+                    <h3 class="nbp-subheadline"><?php echo wp_kses_post($subheadline); ?></h3>
+                <?php endif; ?>
 
-                    <?php if ($button_text && $button_url): ?>
-                        <div class="nbp-button-wrap">
-                            <a href="<?php echo esc_url($button_url); ?>"
-                               class="btn"
-                               target="<?php echo esc_attr($button_target); ?>"
-                               <?php echo $button_target === '_blank' ? 'rel="noopener noreferrer"' : ''; ?>>
-                                <?php echo esc_html($button_text); ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
+                <?php if ($text): ?>
+                    <div class="text"><?php echo wp_kses_post($text); ?></div>
+                <?php endif; ?>
 
-                    <?php if ($custom_html): ?>
-                        <div class="nbp-custom"><?php echo wp_kses_post($custom_html); ?></div>
-                    <?php endif; ?>
-                </div>
+                <?php if ($stoerer_text): ?>
+                    <div class="stoerer" aria-label="Störer"><?php echo wp_kses_post($stoerer_text); ?></div>
+                <?php endif; ?>
+
+                <?php if ($custom_html): ?>
+                    <div class="nbp-custom"><?php echo wp_kses_post($custom_html); ?></div>
+                <?php endif; ?>
+
+                <?php if ($button_text && $button_url): ?>
+                    <a href="<?php echo esc_url($button_url); ?>"
+                       class="button btn"
+                       target="<?php echo esc_attr($button_target); ?>"
+                       <?php echo $button_target === '_blank' ? 'rel="noopener noreferrer"' : ''; ?>
+                       tabindex="0">
+                        <?php echo esc_html($button_text); ?>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
         <?php

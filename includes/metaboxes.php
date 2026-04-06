@@ -480,7 +480,7 @@ function nbp_helpers_callback($post) {
             <th><label for="nbp_css_linebreak">Linebreak CSS</label></th>
             <td>
                 <textarea id="nbp_css_linebreak" name="nbp_css_linebreak" rows="4" class="large-text code"><?php echo esc_textarea($css_linebreak); ?></textarea>
-                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .headline-2 .linebreak</code> — Schwarzer Textblock mit weißer Schrift.</p>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .linebreak</code> — Schwarzer Textblock mit weißer Schrift.</p>
             </td>
         </tr>
         <tr>

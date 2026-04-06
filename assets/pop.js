@@ -160,30 +160,73 @@
     document.addEventListener("keydown", escHandler);
   }
 
-  /* ── Borlabs Integration ── */
+  /* ── Borlabs Integration (v2 + v3) ── */
+
+  function hasBorlabsConsent() {
+    // Borlabs v2: Cookie "borlabs-cookie"
+    if (getCookie("borlabs-cookie")) return true;
+
+    // Borlabs v3: verschiedene Cookie-Namen
+    var cookies = document.cookie.split(";");
+    for (var i = 0; i < cookies.length; i++) {
+      var name = cookies[i].trim().split("=")[0];
+      if (name.indexOf("borlabs-cookie") === 0) return true;
+    }
+
+    // Borlabs v3: localStorage Fallback
+    try {
+      for (var j = 0; j < localStorage.length; j++) {
+        var key = localStorage.key(j);
+        if (key && key.indexOf("borlabs") !== -1) return true;
+      }
+    } catch (e) {
+      // localStorage nicht verfügbar
+    }
+
+    return false;
+  }
 
   function waitForBorlabs(callback, log) {
-    if (typeof window.BorlabsCookie !== "undefined") {
-      log("Borlabs Cookie erkannt");
+    // Borlabs v3: window.BorlabsCookie oder window.borlabs
+    var borlabsActive =
+      typeof window.BorlabsCookie !== "undefined" ||
+      typeof window.borlabs !== "undefined";
 
-      if (getCookie("borlabs-cookie")) {
-        log("Borlabs-Entscheidung bereits vorhanden, fahre fort");
-        callback();
-      } else {
-        log("Warte auf Borlabs Cookie-Consent...");
-        document.addEventListener(
-          "borlabs-cookie-consent-saved",
-          function () {
-            log("Borlabs Consent gespeichert, fahre fort");
-            callback();
-          },
-          { once: true }
-        );
-      }
-    } else {
+    if (!borlabsActive) {
       log("Borlabs nicht aktiv, fahre ohne Prüfung fort");
       callback();
+      return;
     }
+
+    log("Borlabs Cookie erkannt");
+
+    if (hasBorlabsConsent()) {
+      log("Borlabs-Entscheidung bereits vorhanden, fahre fort");
+      callback();
+      return;
+    }
+
+    log("Warte auf Borlabs Cookie-Consent...");
+
+    // Borlabs v2 Event
+    document.addEventListener(
+      "borlabs-cookie-consent-saved",
+      function () {
+        log("Borlabs Consent gespeichert (v2), fahre fort");
+        callback();
+      },
+      { once: true }
+    );
+
+    // Borlabs v3 Event
+    document.addEventListener(
+      "borlabs-cookie-consent-changed",
+      function () {
+        log("Borlabs Consent gespeichert (v3), fahre fort");
+        callback();
+      },
+      { once: true }
+    );
   }
 
   /* ── Init Single Popup ── */

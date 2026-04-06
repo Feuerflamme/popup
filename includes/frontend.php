@@ -86,7 +86,7 @@ function nbp_render_popups() {
         $inline_css .= $s . ' .text { ' . wp_strip_all_tags($css_text) . ' } ';
         $inline_css .= $s . ' .button.btn { ' . wp_strip_all_tags($css_button) . ' } ';
         $inline_css .= $s . ' .stoerer { ' . wp_strip_all_tags($css_stoerer) . ' } ';
-        $inline_css .= $s . ' .headline-2 .linebreak { ' . wp_strip_all_tags($css_linebreak) . ' } ';
+        $inline_css .= $s . ' .linebreak { ' . wp_strip_all_tags($css_linebreak) . ' } ';
         $inline_css .= $s . ' .highlight { ' . wp_strip_all_tags($css_highlight) . ' } ';
 
         echo '<style>' . $inline_css . '</style>';

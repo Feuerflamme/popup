@@ -95,9 +95,9 @@
     align-items: flex-start;
 }
 
-/* ── Headline – Linebreak ── */
+/* ── Linebreak ── */
 
-.nbp-popup .headline-2 .linebreak {
+.nbp-popup .linebreak {
     display: inline-block;
     background-color: #000;
     color: #fff;
@@ -216,14 +216,14 @@ body.nbp-popup-active {
 /* ── Responsive ── */
 
 @media (min-width: 708px) {
-    .nbp-popup .headline-2 .linebreak {
+    .nbp-popup .linebreak {
         font-size: 36px;
         padding: 5px 8px 0 8px;
     }
 }
 
 @media (min-width: 981px) {
-    .nbp-popup .headline-2 .linebreak {
+    .nbp-popup .linebreak {
         font-size: 50px;
         padding: 5px 12px 0 12px;
     }

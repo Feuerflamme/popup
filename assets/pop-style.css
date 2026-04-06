@@ -42,7 +42,7 @@
 .nbp-popup .close {
     position: absolute;
     top: 15px;
-    left: 15px;
+    left: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,7 +87,8 @@
     text-transform: uppercase;
     text-align: left;
     padding: 50px 0 0 0;
-    margin: 0;
+    margin: 0 0 20px 0;
+    max-width: 70%;
 }
 
 /* ── Subheadline ── */
@@ -144,6 +145,7 @@
     padding: 40px;
     box-sizing: border-box;
     z-index: 3;
+    transform: rotate(-20deg);
 }
 
 @media (max-width: 980px) {

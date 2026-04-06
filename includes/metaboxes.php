@@ -54,7 +54,8 @@ line-height: 1.2;
 text-transform: uppercase;
 text-align: left;
 padding: 50px 0 0 0;
-margin: 0;",
+margin: 0 0 20px 0;
+max-width: 70%;",
 
         'subheadline' =>
 "font-weight: 700;
@@ -87,7 +88,8 @@ font-weight: 900;
 font-size: 20px;
 line-height: 1.3;
 padding: 40px;
-box-sizing: border-box;",
+box-sizing: border-box;
+transform: rotate(-20deg);",
     ];
 }
 

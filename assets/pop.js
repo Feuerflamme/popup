@@ -166,14 +166,29 @@
     // Borlabs v2: Cookie "borlabs-cookie"
     if (getCookie("borlabs-cookie")) return true;
 
-    // Borlabs v3: verschiedene Cookie-Namen
+    // Borlabs v3: verschiedene Cookie-Namen (z.B. borlabs-cookie-...)
     var cookies = document.cookie.split(";");
     for (var i = 0; i < cookies.length; i++) {
       var name = cookies[i].trim().split("=")[0];
-      if (name.indexOf("borlabs-cookie") === 0) return true;
+      if (name.indexOf("borlabs") !== -1) return true;
     }
 
-    // Borlabs v3: localStorage Fallback
+    // Borlabs v2 API: BorlabsCookie Objekt prüfen
+    try {
+      if (typeof window.BorlabsCookie !== "undefined" && window.BorlabsCookie.checkCookieConsent) {
+        return true;
+      }
+    } catch (e) {}
+
+    // Borlabs v3 API: window.borlabs Consent-Status prüfen
+    try {
+      if (typeof window.borlabs !== "undefined" && window.borlabs.cookie) {
+        var consents = window.borlabs.cookie.consents;
+        if (consents && Object.keys(consents).length > 0) return true;
+      }
+    } catch (e) {}
+
+    // localStorage Fallback
     try {
       for (var j = 0; j < localStorage.length; j++) {
         var key = localStorage.key(j);
@@ -183,6 +198,21 @@
       // localStorage nicht verfügbar
     }
 
+    return false;
+  }
+
+  function isBorlabsBannerVisible() {
+    // Prüfe ob das Consent-Banner tatsächlich sichtbar ist
+    var selectors = [
+      "#BorlabsCookieBox",           // v2
+      ".BorlabsCookie",              // v2/v3
+      "[data-borlabs-cookie]",       // v3
+      "#CookieBoxSaveButton"         // v2
+    ];
+    for (var i = 0; i < selectors.length; i++) {
+      var el = document.querySelector(selectors[i]);
+      if (el && el.offsetParent !== null) return true;
+    }
     return false;
   }
 
@@ -206,14 +236,28 @@
       return;
     }
 
+    // Wenn kein Banner sichtbar ist, wurde bereits zugestimmt → fortfahren
+    if (!isBorlabsBannerVisible()) {
+      log("Borlabs Banner nicht sichtbar – Consent vermutlich bereits erteilt, fahre fort");
+      callback();
+      return;
+    }
+
     log("Warte auf Borlabs Cookie-Consent...");
+
+    var called = false;
+    function onConsent(source) {
+      if (called) return;
+      called = true;
+      log("Borlabs Consent erhalten (" + source + "), fahre fort");
+      callback();
+    }
 
     // Borlabs v2 Event
     document.addEventListener(
       "borlabs-cookie-consent-saved",
       function () {
-        log("Borlabs Consent gespeichert (v2), fahre fort");
-        callback();
+        onConsent("v2 event");
       },
       { once: true }
     );
@@ -222,11 +266,15 @@
     document.addEventListener(
       "borlabs-cookie-consent-changed",
       function () {
-        log("Borlabs Consent gespeichert (v3), fahre fort");
-        callback();
+        onConsent("v3 event");
       },
       { once: true }
     );
+
+    // Fallback-Timeout: nach 5 Sekunden trotzdem fortfahren
+    setTimeout(function () {
+      onConsent("timeout fallback");
+    }, 5000);
   }
 
   /* ── Init Single Popup ── */

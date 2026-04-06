@@ -126,7 +126,7 @@ height: auto;",
 
         'headline' =>
 "font-size: 1.2em;
-padding-top: 10px;
+padding-top: 45px;
 margin-bottom: 10px;",
 
         'subheadline' =>
@@ -138,7 +138,7 @@ margin-bottom: 10px;",
 margin-bottom: 10px;",
 
         'button' =>
-"width: 100%;
+"width: auto;
 text-align: center;
 margin-top: 10px;",
 

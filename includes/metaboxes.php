@@ -49,29 +49,25 @@ height: auto;
 object-fit: contain;",
 
         'headline' =>
-"font-size: 28px;
-font-weight: 900;
+"font-weight: 900;
 line-height: 1.2;
 text-transform: uppercase;
 text-align: left;
-padding: 20px 0 0 0;
+padding: 50px 0 0 0;
 margin: 0;",
 
         'subheadline' =>
-"font-size: 18px;
-font-weight: 700;
+"font-weight: 700;
 line-height: 1.3;
 text-align: left;
 margin: 0 0 16px 0;",
 
         'text' =>
-"font-size: 16px;
-text-align: left;
+"text-align: left;
 line-height: 1.4;",
 
         'button' =>
-"font-size: 14px;
-width: max-content;
+"width: max-content;
 margin-top: 15px;",
 
         'stoerer' =>

@@ -92,13 +92,13 @@ function nbp_render_popups() {
              style="display:none;"
              role="dialog"
              aria-modal="true"
-             aria-label="<?php echo esc_attr($headline ?: $popup->post_title); ?>">
+             aria-label="<?php echo esc_attr(wp_strip_all_tags($headline ?: $popup->post_title)); ?>">
             <div class="container">
                 <button type="button" class="close" aria-label="Fenster schließen" tabindex="0">X</button>
 
                 <?php if ($image): ?>
                     <div class="nbp-image">
-                        <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($headline ?: ''); ?>">
+                        <img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr(wp_strip_all_tags($headline ?: '')); ?>">
                     </div>
                 <?php endif; ?>
 

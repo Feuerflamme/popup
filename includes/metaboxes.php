@@ -49,7 +49,8 @@ height: auto;
 object-fit: contain;",
 
         'headline' =>
-"font-weight: 900;
+"font-size: 28px;
+font-weight: 900;
 line-height: 1.2;
 text-transform: uppercase;
 text-align: left;
@@ -57,24 +58,40 @@ padding: 20px 0 0 0;
 margin: 0;",
 
         'subheadline' =>
-"font-weight: 700;
+"font-size: 18px;
+font-weight: 700;
 line-height: 1.3;
 text-align: left;
 margin: 0 0 16px 0;",
 
         'text' =>
-"text-align: left;
+"font-size: 16px;
+text-align: left;
 line-height: 1.4;",
 
         'button' =>
-"width: max-content;
+"font-size: 14px;
+width: max-content;
 margin-top: 15px;",
 
         'stoerer' =>
-"background-color: hsl(57, 86%, 63%);
-padding: 40px;
+"position: absolute;
+top: -40px;
+right: -70px;
+width: 260px;
+height: 260px;
+border-radius: 50%;
+background-color: hsl(57, 86%, 63%);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
 font-weight: 900;
-font-size: 22px;",
+font-size: 20px;
+line-height: 1.3;
+padding: 40px;
+box-sizing: border-box;",
     ];
 }
 
@@ -213,7 +230,10 @@ function nbp_content_callback($post) {
         </tr>
         <tr>
             <th><label for="nbp_headline">Headline</label></th>
-            <td><input type="text" id="nbp_headline" name="nbp_headline" value="<?php echo esc_attr($headline); ?>" class="large-text"></td>
+            <td>
+                <textarea id="nbp_headline" name="nbp_headline" rows="4" class="large-text code"><?php echo esc_textarea($headline); ?></textarea>
+                <p class="description">HTML erlaubt. Verwende z.B. <code>&lt;div class="linebreak"&gt;&lt;span class="highlight"&gt;TEXT&lt;/span&gt;&lt;/div&gt;</code> für die Döll-Optik. Die Klassen <code>.linebreak</code> und <code>.highlight</code> werden vom aktiven Theme gestylt.</p>
+            </td>
         </tr>
         <tr>
             <th><label for="nbp_css_headline">Headline CSS</label></th>
@@ -224,7 +244,10 @@ function nbp_content_callback($post) {
         </tr>
         <tr>
             <th><label for="nbp_subheadline">Subheadline</label></th>
-            <td><input type="text" id="nbp_subheadline" name="nbp_subheadline" value="<?php echo esc_attr($subheadline); ?>" class="large-text"></td>
+            <td>
+                <textarea id="nbp_subheadline" name="nbp_subheadline" rows="3" class="large-text code"><?php echo esc_textarea($subheadline); ?></textarea>
+                <p class="description">HTML erlaubt.</p>
+            </td>
         </tr>
         <tr>
             <th><label for="nbp_css_subheadline">Subheadline CSS</label></th>
@@ -441,8 +464,8 @@ function nbp_save_meta($post_id, $post) {
         'deactivate_date'  => 'sanitize_text_field',
         'cookie_days'      => 'intval',
         'image'            => 'esc_url_raw',
-        'headline'         => 'sanitize_text_field',
-        'subheadline'      => 'sanitize_text_field',
+        'headline'         => 'wp_kses_post',
+        'subheadline'      => 'wp_kses_post',
         'text'             => 'wp_kses_post',
         'button_text'      => 'sanitize_text_field',
         'button_url'       => 'esc_url_raw',

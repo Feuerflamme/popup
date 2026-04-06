@@ -36,3 +36,16 @@
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
+/* Mobile badge label */
+.nbp-mobile-badge {
+    display: inline-block;
+    background: #0073aa;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-left: 4px;
+}

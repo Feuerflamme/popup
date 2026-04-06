@@ -64,6 +64,7 @@ function nbp_render_popups() {
 
         // Per-element CSS
         $defaults = nbp_default_css($id);
+        $m_defaults = nbp_default_css_mobile();
         $css_overlay     = get_post_meta($id, '_nbp_css_overlay', true)     ?: $defaults['overlay'];
         $css_container   = get_post_meta($id, '_nbp_css_container', true)   ?: $defaults['container'];
         $css_close       = get_post_meta($id, '_nbp_css_close', true)       ?: $defaults['close'];
@@ -75,6 +76,20 @@ function nbp_render_popups() {
         $css_stoerer     = get_post_meta($id, '_nbp_css_stoerer', true)     ?: $defaults['stoerer'];
         $css_linebreak   = get_post_meta($id, '_nbp_css_linebreak', true)   ?: $defaults['linebreak'];
         $css_highlight   = get_post_meta($id, '_nbp_css_highlight', true)   ?: $defaults['highlight'];
+
+        // Mobile CSS
+        $mobile_bp           = intval(get_post_meta($id, '_nbp_mobile_breakpoint', true) ?: 768);
+        $css_overlay_m       = get_post_meta($id, '_nbp_css_overlay_mobile', true)     ?: $m_defaults['overlay'];
+        $css_container_m     = get_post_meta($id, '_nbp_css_container_mobile', true)   ?: $m_defaults['container'];
+        $css_close_m         = get_post_meta($id, '_nbp_css_close_mobile', true)       ?: $m_defaults['close'];
+        $css_image_m         = get_post_meta($id, '_nbp_css_image_mobile', true)       ?: $m_defaults['image'];
+        $css_headline_m      = get_post_meta($id, '_nbp_css_headline_mobile', true)    ?: $m_defaults['headline'];
+        $css_subheadline_m   = get_post_meta($id, '_nbp_css_subheadline_mobile', true) ?: $m_defaults['subheadline'];
+        $css_text_m          = get_post_meta($id, '_nbp_css_text_mobile', true)        ?: $m_defaults['text'];
+        $css_button_m        = get_post_meta($id, '_nbp_css_button_mobile', true)      ?: $m_defaults['button'];
+        $css_stoerer_m       = get_post_meta($id, '_nbp_css_stoerer_mobile', true)     ?: $m_defaults['stoerer'];
+        $css_linebreak_m     = get_post_meta($id, '_nbp_css_linebreak_mobile', true)   ?: $m_defaults['linebreak'];
+        $css_highlight_m     = get_post_meta($id, '_nbp_css_highlight_mobile', true)   ?: $m_defaults['highlight'];
 
         $s = '.nbp-popup-' . intval($id);
         $inline_css  = $s . ' { ' . wp_strip_all_tags($css_overlay) . ' } ';
@@ -89,7 +104,22 @@ function nbp_render_popups() {
         $inline_css .= $s . ' .linebreak { ' . wp_strip_all_tags($css_linebreak) . ' } ';
         $inline_css .= $s . ' .highlight { ' . wp_strip_all_tags($css_highlight) . ' } ';
 
-        echo '<style>' . $inline_css . '</style>';
+        // Mobile overrides inside @media query
+        $mobile_css  = '@media (max-width: ' . $mobile_bp . 'px) { ';
+        $mobile_css .= $s . ' { ' . wp_strip_all_tags($css_overlay_m) . ' } ';
+        $mobile_css .= $s . ' .container { ' . wp_strip_all_tags($css_container_m) . ' } ';
+        $mobile_css .= $s . ' .close { ' . wp_strip_all_tags($css_close_m) . ' } ';
+        $mobile_css .= $s . ' .nbp-image img { ' . wp_strip_all_tags($css_image_m) . ' } ';
+        $mobile_css .= $s . ' .headline-2 { ' . wp_strip_all_tags($css_headline_m) . ' } ';
+        $mobile_css .= $s . ' .nbp-subheadline { ' . wp_strip_all_tags($css_subheadline_m) . ' } ';
+        $mobile_css .= $s . ' .text { ' . wp_strip_all_tags($css_text_m) . ' } ';
+        $mobile_css .= $s . ' .button.btn { ' . wp_strip_all_tags($css_button_m) . ' } ';
+        $mobile_css .= $s . ' .stoerer { ' . wp_strip_all_tags($css_stoerer_m) . ' } ';
+        $mobile_css .= $s . ' .linebreak { ' . wp_strip_all_tags($css_linebreak_m) . ' } ';
+        $mobile_css .= $s . ' .highlight { ' . wp_strip_all_tags($css_highlight_m) . ' } ';
+        $mobile_css .= ' }';
+
+        echo '<style>' . $inline_css . $mobile_css . '</style>';
         ?>
         <div class="nbp-popup nbp-popup-<?php echo intval($id); ?>"
              data-popup-id="<?php echo intval($id); ?>"

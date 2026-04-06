@@ -105,6 +105,62 @@ font-weight: 900;",
     ];
 }
 
+/* ── Default Mobile CSS Values ── */
+function nbp_default_css_mobile() {
+    return [
+        'overlay' =>
+"padding: 10px;",
+
+        'container' =>
+"max-width: 100%;
+padding: 1.2em;
+padding-right: 1.2em;
+overflow: hidden;",
+
+        'close' =>
+"font-size: 28px;",
+
+        'image' =>
+"width: 100%;
+height: auto;",
+
+        'headline' =>
+"font-size: 1.2em;
+padding-top: 10px;
+margin-bottom: 10px;",
+
+        'subheadline' =>
+"font-size: 1em;
+margin-bottom: 10px;",
+
+        'text' =>
+"font-size: 0.95em;
+margin-bottom: 10px;",
+
+        'button' =>
+"width: 100%;
+text-align: center;
+margin-top: 10px;",
+
+        'stoerer' =>
+"position: static;
+width: 100%;
+height: auto;
+border-radius: 8px;
+transform: none;
+padding: 15px;
+margin-bottom: 15px;
+font-size: 16px;",
+
+        'linebreak' =>
+"font-size: 18px;
+padding: 3px 6px;",
+
+        'highlight' =>
+"",
+    ];
+}
+
 /* ── Settings Meta Box ── */
 function nbp_settings_callback($post) {
     wp_nonce_field('nbp_save', 'nbp_nonce');
@@ -114,6 +170,7 @@ function nbp_settings_callback($post) {
     $deactivate_date = nbp_get_meta($post->ID, 'deactivate_date');
     $cookie_days     = nbp_get_meta($post->ID, 'cookie_days', '5');
     $show_always     = nbp_get_meta($post->ID, 'show_always', '0');
+    $mobile_bp       = nbp_get_meta($post->ID, 'mobile_breakpoint', '768');
     ?>
     <table class="form-table nbp-form-table">
         <tr>
@@ -161,6 +218,13 @@ function nbp_settings_callback($post) {
                 <p class="description">Wie lange das Cookie gespeichert wird (0 = Session-Cookie, wird beim Schließen des Browsers gelöscht). Gilt nur für Timer-Trigger wenn &quot;Bei jedem Besuch anzeigen&quot; deaktiviert ist.</p>
             </td>
         </tr>
+        <tr>
+            <th><label for="nbp_mobile_breakpoint">Mobile Breakpoint (px)</label></th>
+            <td>
+                <input type="number" id="nbp_mobile_breakpoint" name="nbp_mobile_breakpoint" value="<?php echo esc_attr($mobile_bp); ?>" min="320" max="1200" step="1">
+                <p class="description">Ab welcher Bildschirmbreite (in px) auf die Mobile-Version gewechselt wird. Standard: 768.</p>
+            </td>
+        </tr>
     </table>
     <?php
 }
@@ -180,6 +244,7 @@ function nbp_content_callback($post) {
 
     // Default CSS per element
     $defaults = nbp_default_css($pid);
+    $m_defaults = nbp_default_css_mobile();
 
     $css_overlay   = nbp_get_meta($post->ID, 'css_overlay',   $defaults['overlay']);
     $css_container = nbp_get_meta($post->ID, 'css_container', $defaults['container']);
@@ -191,6 +256,17 @@ function nbp_content_callback($post) {
     $css_close     = nbp_get_meta($post->ID, 'css_close',     $defaults['close']);
     $stoerer_text  = nbp_get_meta($post->ID, 'stoerer_text');
     $css_stoerer   = nbp_get_meta($post->ID, 'css_stoerer',   $defaults['stoerer'] ?? '');
+
+    // Mobile CSS values
+    $css_overlay_m   = nbp_get_meta($post->ID, 'css_overlay_mobile',   $m_defaults['overlay']);
+    $css_container_m = nbp_get_meta($post->ID, 'css_container_mobile', $m_defaults['container']);
+    $css_image_m     = nbp_get_meta($post->ID, 'css_image_mobile',     $m_defaults['image']);
+    $css_headline_m  = nbp_get_meta($post->ID, 'css_headline_mobile',  $m_defaults['headline']);
+    $css_subheadline_m = nbp_get_meta($post->ID, 'css_subheadline_mobile', $m_defaults['subheadline']);
+    $css_text_m      = nbp_get_meta($post->ID, 'css_text_mobile',      $m_defaults['text']);
+    $css_button_m    = nbp_get_meta($post->ID, 'css_button_mobile',    $m_defaults['button']);
+    $css_close_m     = nbp_get_meta($post->ID, 'css_close_mobile',     $m_defaults['close']);
+    $css_stoerer_m   = nbp_get_meta($post->ID, 'css_stoerer_mobile',   $m_defaults['stoerer']);
     ?>
     <table class="form-table nbp-form-table">
         <tr>
@@ -201,6 +277,13 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_overlay_mobile">Overlay CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_overlay_mobile" name="nbp_css_overlay_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_overlay_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Overlay.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label for="nbp_css_container">Container CSS</label></th>
             <td>
                 <textarea id="nbp_css_container" name="nbp_css_container" rows="4" class="large-text code"><?php echo esc_textarea($css_container); ?></textarea>
@@ -208,10 +291,24 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_container_mobile">Container CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_container_mobile" name="nbp_css_container_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_container_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Container.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label for="nbp_css_close">Close-Button CSS</label></th>
             <td>
                 <textarea id="nbp_css_close" name="nbp_css_close" rows="3" class="large-text code"><?php echo esc_textarea($css_close); ?></textarea>
                 <p class="description">CSS für den Schließen-Button <code>.nbp-popup-<?php echo $pid; ?> .close</code></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_close_mobile">Close CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_close_mobile" name="nbp_css_close_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_close_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Schließen-Button.</p>
             </td>
         </tr>
         <tr>
@@ -239,6 +336,13 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_image_mobile">Bild CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_image_mobile" name="nbp_css_image_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_image_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für das Bild.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label>Headline</label></th>
             <td>
                 <?php wp_editor($headline, 'nbp_headline', [
@@ -255,6 +359,13 @@ function nbp_content_callback($post) {
             <td>
                 <textarea id="nbp_css_headline" name="nbp_css_headline" rows="3" class="large-text code"><?php echo esc_textarea($css_headline); ?></textarea>
                 <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .headline-2</code></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_headline_mobile">Headline CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_headline_mobile" name="nbp_css_headline_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_headline_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für die Headline.</p>
             </td>
         </tr>
         <tr>
@@ -277,6 +388,13 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_subheadline_mobile">Subheadline CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_subheadline_mobile" name="nbp_css_subheadline_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_subheadline_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für die Subheadline.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label for="nbp_text">Text</label></th>
             <td>
                 <?php wp_editor($text, 'nbp_text', [
@@ -293,6 +411,13 @@ function nbp_content_callback($post) {
             <td>
                 <textarea id="nbp_css_text" name="nbp_css_text" rows="3" class="large-text code"><?php echo esc_textarea($css_text); ?></textarea>
                 <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .text</code></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_text_mobile">Text CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_text_mobile" name="nbp_css_text_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_text_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Text.</p>
             </td>
         </tr>
         <tr>
@@ -320,6 +445,13 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_button_mobile">Button CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_button_mobile" name="nbp_css_button_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_button_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Button.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label>Störer (optional)</label></th>
             <td>
                 <?php wp_editor($stoerer_text, 'nbp_stoerer_text', [
@@ -336,6 +468,13 @@ function nbp_content_callback($post) {
             <td>
                 <textarea id="nbp_css_stoerer" name="nbp_css_stoerer" rows="3" class="large-text code"><?php echo esc_textarea($css_stoerer); ?></textarea>
                 <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .stoerer</code></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_stoerer_mobile">Störer CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_stoerer_mobile" name="nbp_css_stoerer_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_stoerer_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für den Störer.</p>
             </td>
         </tr>
         <tr>
@@ -470,9 +609,12 @@ function nbp_trigger_callback($post) {
 function nbp_helpers_callback($post) {
     $pid = intval($post->ID);
     $defaults = nbp_default_css($pid);
+    $m_defaults = nbp_default_css_mobile();
 
     $css_linebreak = nbp_get_meta($post->ID, 'css_linebreak', $defaults['linebreak']);
     $css_highlight = nbp_get_meta($post->ID, 'css_highlight', $defaults['highlight']);
+    $css_linebreak_m = nbp_get_meta($post->ID, 'css_linebreak_mobile', $m_defaults['linebreak']);
+    $css_highlight_m = nbp_get_meta($post->ID, 'css_highlight_mobile', $m_defaults['highlight']);
     ?>
     <p class="description" style="margin-bottom:12px;">CSS für die Hilfsklassen <code>.linebreak</code> und <code>.highlight</code>, die in allen Text-Editoren verwendet werden können.</p>
     <table class="form-table nbp-form-table">
@@ -484,10 +626,24 @@ function nbp_helpers_callback($post) {
             </td>
         </tr>
         <tr>
+            <th><label for="nbp_css_linebreak_mobile">Linebreak CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_linebreak_mobile" name="nbp_css_linebreak_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_linebreak_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für Linebreak.</p>
+            </td>
+        </tr>
+        <tr>
             <th><label for="nbp_css_highlight">Highlight CSS</label></th>
             <td>
                 <textarea id="nbp_css_highlight" name="nbp_css_highlight" rows="3" class="large-text code"><?php echo esc_textarea($css_highlight); ?></textarea>
                 <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .highlight</code> — Hervorgehobene Wörter.</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_highlight_mobile">Highlight CSS <span class="nbp-mobile-badge">📱 Mobile</span></label></th>
+            <td>
+                <textarea id="nbp_css_highlight_mobile" name="nbp_css_highlight_mobile" rows="3" class="large-text code"><?php echo esc_textarea($css_highlight_m); ?></textarea>
+                <p class="description">Mobile-Überschreibungen für Highlight.</p>
             </td>
         </tr>
     </table>
@@ -522,6 +678,7 @@ function nbp_save_meta($post_id, $post) {
         'activate_date'    => 'sanitize_text_field',
         'deactivate_date'  => 'sanitize_text_field',
         'cookie_days'      => 'intval',
+        'mobile_breakpoint' => 'intval',
         'image'            => 'esc_url_raw',
         'headline'         => 'wp_kses_post',
         'subheadline'      => 'wp_kses_post',
@@ -547,6 +704,18 @@ function nbp_save_meta($post_id, $post) {
         'css_stoerer'      => 'wp_strip_all_tags',
         'css_linebreak'    => 'wp_strip_all_tags',
         'css_highlight'    => 'wp_strip_all_tags',
+        // Mobile CSS fields
+        'css_overlay_mobile'     => 'wp_strip_all_tags',
+        'css_container_mobile'   => 'wp_strip_all_tags',
+        'css_close_mobile'       => 'wp_strip_all_tags',
+        'css_image_mobile'       => 'wp_strip_all_tags',
+        'css_headline_mobile'    => 'wp_strip_all_tags',
+        'css_subheadline_mobile' => 'wp_strip_all_tags',
+        'css_text_mobile'        => 'wp_strip_all_tags',
+        'css_button_mobile'      => 'wp_strip_all_tags',
+        'css_stoerer_mobile'     => 'wp_strip_all_tags',
+        'css_linebreak_mobile'   => 'wp_strip_all_tags',
+        'css_highlight_mobile'   => 'wp_strip_all_tags',
     ];
 
     // Checkboxes (missing = unchecked = 0)

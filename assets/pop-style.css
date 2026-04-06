@@ -1,4 +1,4 @@
-/* No Bloat Popups – Döll-Style Base CSS */
+/* PE Popups – Base CSS */
 /* Uses common class names (.container, .close, .headline-2, .text, .button.btn, .stoerer)
    so the active theme's styles are inherited automatically.
    All selectors are scoped with .nbp-popup to avoid collisions. */
@@ -41,7 +41,7 @@
 
 .nbp-popup .close {
     position: absolute;
-    top: 15px;
+    top: 10px;
     left: 20px;
     display: flex;
     align-items: center;
@@ -88,7 +88,36 @@
     text-align: left;
     padding: 50px 0 0 0;
     margin: 0 0 20px 0;
-    max-width: 70%;
+    overflow: visible;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* ── Headline – Linebreak ── */
+
+.nbp-popup .headline-2 .linebreak {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    padding: 5px 8px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    line-height: 1.2;
+}
+
+/* ── Headline – Highlight ── */
+
+.nbp-popup .highlight {
+    color: inherit;
+    font-weight: 900;
+}
+
+/* ── Text – Highlight ── */
+
+.nbp-popup .text .highlight {
+    font-weight: 900;
 }
 
 /* ── Subheadline ── */
@@ -97,7 +126,7 @@
     font-weight: 700;
     line-height: 1.3;
     text-align: left;
-    margin: 0 0 16px 0;
+    margin: 0 0 20px 0;
 }
 
 /* ── Text ── */
@@ -105,6 +134,8 @@
 .nbp-popup .text {
     text-align: left;
     line-height: 1.4;
+    margin: 0 0 20px 0;
+    padding-top: 20px;
 }
 
 .nbp-popup .text p {
@@ -183,6 +214,20 @@ body.nbp-popup-active {
 }
 
 /* ── Responsive ── */
+
+@media (min-width: 708px) {
+    .nbp-popup .headline-2 .linebreak {
+        font-size: 36px;
+        padding: 5px 8px 0 8px;
+    }
+}
+
+@media (min-width: 981px) {
+    .nbp-popup .headline-2 .linebreak {
+        font-size: 50px;
+        padding: 5px 12px 0 12px;
+    }
+}
 
 @media (max-width: 980px) {
     .nbp-popup .container {

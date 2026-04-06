@@ -1,4 +1,4 @@
-# No Bloat Popups
+# PE Popups
 
 Leichtgewichtiges WordPress Popup-Plugin mit JS-basierter Cookie-Logik für volle Cache-Kompatibilität.
 

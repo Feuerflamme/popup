@@ -15,7 +15,7 @@ function nbp_register_post_type() {
         'search_items'       => 'Popups suchen',
         'not_found'          => 'Keine Popups gefunden',
         'not_found_in_trash' => 'Keine Popups im Papierkorb',
-        'menu_name'          => 'No Bloat Popups',
+        'menu_name'          => 'PE Popups',
     ];
 
     register_post_type('nbp_popup', [

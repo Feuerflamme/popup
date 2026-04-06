@@ -19,6 +19,7 @@ function nbp_add_meta_boxes() {
     add_meta_box('nbp_display', 'Anzeige-Regeln', 'nbp_display_callback', 'nbp_popup', 'normal', 'default');
     add_meta_box('nbp_trigger', 'Trigger / Auslöser', 'nbp_trigger_callback', 'nbp_popup', 'normal', 'default');
     add_meta_box('nbp_advanced', 'Erweitert', 'nbp_advanced_callback', 'nbp_popup', 'normal', 'default');
+    add_meta_box('nbp_helpers', 'Hilfsklassen CSS', 'nbp_helpers_callback', 'nbp_popup', 'normal', 'default');
 }
 
 function nbp_get_meta($post_id, $key, $default = '') {
@@ -54,18 +55,18 @@ line-height: 1.2;
 text-transform: uppercase;
 text-align: left;
 padding: 50px 0 0 0;
-margin: 0 0 20px 0;
-max-width: 70%;",
+margin: 0 0 20px 0;",
 
         'subheadline' =>
 "font-weight: 700;
 line-height: 1.3;
 text-align: left;
-margin: 0 0 16px 0;",
+margin: 0 0 20px 0;",
 
         'text' =>
 "text-align: left;
-line-height: 1.4;",
+line-height: 1.4;
+margin: 0 0 20px 0;",
 
         'button' =>
 "width: max-content;
@@ -90,6 +91,17 @@ line-height: 1.3;
 padding: 40px;
 box-sizing: border-box;
 transform: rotate(-20deg);",
+
+        'linebreak' =>
+"display: inline-block;
+background-color: #000;
+color: #fff;
+padding: 5px 8px;
+line-height: 1.2;",
+
+        'highlight' =>
+"color: inherit;
+font-weight: 900;",
     ];
 }
 
@@ -227,10 +239,15 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
-            <th><label for="nbp_headline">Headline</label></th>
+            <th><label>Headline</label></th>
             <td>
-                <textarea id="nbp_headline" name="nbp_headline" rows="4" class="large-text code"><?php echo esc_textarea($headline); ?></textarea>
-                <p class="description">HTML erlaubt. Verwende z.B. <code>&lt;div class="linebreak"&gt;&lt;span class="highlight"&gt;TEXT&lt;/span&gt;&lt;/div&gt;</code> für die Döll-Optik. Die Klassen <code>.linebreak</code> und <code>.highlight</code> werden vom aktiven Theme gestylt.</p>
+                <?php wp_editor($headline, 'nbp_headline', [
+                    'textarea_name' => 'nbp_headline',
+                    'textarea_rows' => 6,
+                    'media_buttons' => false,
+                    'teeny'         => true,
+                ]); ?>
+                <p class="description">HTML erlaubt. Verwende z.B. <code>&lt;div class="linebreak"&gt;&lt;span class="highlight"&gt;TEXT&lt;/span&gt;&lt;/div&gt;</code> für schwarze Textblöcke mit hervorgehobenen Wörtern.</p>
             </td>
         </tr>
         <tr>
@@ -241,10 +258,15 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
-            <th><label for="nbp_subheadline">Subheadline</label></th>
+            <th><label>Subheadline</label></th>
             <td>
-                <textarea id="nbp_subheadline" name="nbp_subheadline" rows="3" class="large-text code"><?php echo esc_textarea($subheadline); ?></textarea>
-                <p class="description">HTML erlaubt.</p>
+                <?php wp_editor($subheadline, 'nbp_subheadline', [
+                    'textarea_name' => 'nbp_subheadline',
+                    'textarea_rows' => 4,
+                    'media_buttons' => false,
+                    'teeny'         => true,
+                ]); ?>
+                <p class="description">HTML-Klassen: <code>&lt;div class="linebreak"&gt;TEXT&lt;/div&gt;</code> = schwarzer Textblock, <code>&lt;span class="highlight"&gt;TEXT&lt;/span&gt;</code> = hervorgehoben.</p>
             </td>
         </tr>
         <tr>
@@ -263,6 +285,7 @@ function nbp_content_callback($post) {
                     'media_buttons' => false,
                     'teeny'         => true,
                 ]); ?>
+                <p class="description">HTML-Klassen: <code>&lt;div class="linebreak"&gt;TEXT&lt;/div&gt;</code> = schwarzer Textblock, <code>&lt;span class="highlight"&gt;TEXT&lt;/span&gt;</code> = hervorgehoben.</p>
             </td>
         </tr>
         <tr>
@@ -297,10 +320,15 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
-            <th><label for="nbp_stoerer_text">Störer (optional)</label></th>
+            <th><label>Störer (optional)</label></th>
             <td>
-                <textarea id="nbp_stoerer_text" name="nbp_stoerer_text" rows="4" class="large-text"><?php echo esc_textarea($stoerer_text); ?></textarea>
-                <p class="description">HTML für den Störer-Badge (z.B. Datum, kurze Infos). Leer lassen = kein Störer. HTML erlaubt.</p>
+                <?php wp_editor($stoerer_text, 'nbp_stoerer_text', [
+                    'textarea_name' => 'nbp_stoerer_text',
+                    'textarea_rows' => 4,
+                    'media_buttons' => false,
+                    'teeny'         => true,
+                ]); ?>
+                <p class="description">Inhalt des Störer-Badges (z.B. Datum, kurze Infos). Leer lassen = kein Störer. HTML-Klassen: <code>.linebreak</code>, <code>.highlight</code> verfügbar.</p>
             </td>
         </tr>
         <tr>
@@ -311,10 +339,15 @@ function nbp_content_callback($post) {
             </td>
         </tr>
         <tr>
-            <th><label for="nbp_custom_html">Custom HTML</label></th>
+            <th><label>Custom HTML</label></th>
             <td>
-                <textarea id="nbp_custom_html" name="nbp_custom_html" rows="6" class="large-text code"><?php echo esc_textarea($custom_html); ?></textarea>
-                <p class="description">Eigenes HTML wird unterhalb des Buttons eingefügt.</p>
+                <?php wp_editor($custom_html, 'nbp_custom_html', [
+                    'textarea_name' => 'nbp_custom_html',
+                    'textarea_rows' => 6,
+                    'media_buttons' => false,
+                    'teeny'         => true,
+                ]); ?>
+                <p class="description">Eigenes HTML wird unterhalb des Buttons eingefügt. HTML-Klassen: <code>.linebreak</code>, <code>.highlight</code> verfügbar.</p>
             </td>
         </tr>
     </table>
@@ -433,6 +466,34 @@ function nbp_trigger_callback($post) {
     <?php
 }
 
+/* ── Hilfsklassen CSS Meta Box ── */
+function nbp_helpers_callback($post) {
+    $pid = intval($post->ID);
+    $defaults = nbp_default_css($pid);
+
+    $css_linebreak = nbp_get_meta($post->ID, 'css_linebreak', $defaults['linebreak']);
+    $css_highlight = nbp_get_meta($post->ID, 'css_highlight', $defaults['highlight']);
+    ?>
+    <p class="description" style="margin-bottom:12px;">CSS für die Hilfsklassen <code>.linebreak</code> und <code>.highlight</code>, die in allen Text-Editoren verwendet werden können.</p>
+    <table class="form-table nbp-form-table">
+        <tr>
+            <th><label for="nbp_css_linebreak">Linebreak CSS</label></th>
+            <td>
+                <textarea id="nbp_css_linebreak" name="nbp_css_linebreak" rows="4" class="large-text code"><?php echo esc_textarea($css_linebreak); ?></textarea>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .headline-2 .linebreak</code> — Schwarzer Textblock mit weißer Schrift.</p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="nbp_css_highlight">Highlight CSS</label></th>
+            <td>
+                <textarea id="nbp_css_highlight" name="nbp_css_highlight" rows="3" class="large-text code"><?php echo esc_textarea($css_highlight); ?></textarea>
+                <p class="description">CSS für <code>.nbp-popup-<?php echo $pid; ?> .highlight</code> — Hervorgehobene Wörter.</p>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
+
 /* ── Advanced Meta Box ── */
 function nbp_advanced_callback($post) {
     $debug = nbp_get_meta($post->ID, 'debug', '0');
@@ -484,6 +545,8 @@ function nbp_save_meta($post_id, $post) {
         'css_button'       => 'wp_strip_all_tags',
         'stoerer_text'     => 'wp_kses_post',
         'css_stoerer'      => 'wp_strip_all_tags',
+        'css_linebreak'    => 'wp_strip_all_tags',
+        'css_highlight'    => 'wp_strip_all_tags',
     ];
 
     // Checkboxes (missing = unchecked = 0)

@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: No Bloat Popups
+ * Plugin Name: PE Popups
  * Description: Leichtgewichtiges Popup-Plugin mit JS-basierter Cookie-Logik für Cache-Kompatibilität.
  * Version: 1.0.0
  * Author: Thomas Pondelek
- * Text Domain: no-bloat-popups
+ * Text Domain: pe-popups
  */
 
 if (!defined('ABSPATH')) {

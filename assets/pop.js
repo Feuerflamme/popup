@@ -236,45 +236,15 @@
       return;
     }
 
-    // Wenn kein Banner sichtbar ist, wurde bereits zugestimmt → fortfahren
-    if (!isBorlabsBannerVisible()) {
-      log("Borlabs Banner nicht sichtbar – Consent vermutlich bereits erteilt, fahre fort");
-      callback();
+    // Wenn Banner sichtbar → Popup NICHT öffnen
+    if (isBorlabsBannerVisible()) {
+      log("Borlabs Banner ist sichtbar – Popup wird NICHT geöffnet");
       return;
     }
 
-    log("Warte auf Borlabs Cookie-Consent...");
-
-    var called = false;
-    function onConsent(source) {
-      if (called) return;
-      called = true;
-      log("Borlabs Consent erhalten (" + source + "), fahre fort");
-      callback();
-    }
-
-    // Borlabs v2 Event
-    document.addEventListener(
-      "borlabs-cookie-consent-saved",
-      function () {
-        onConsent("v2 event");
-      },
-      { once: true }
-    );
-
-    // Borlabs v3 Event
-    document.addEventListener(
-      "borlabs-cookie-consent-changed",
-      function () {
-        onConsent("v3 event");
-      },
-      { once: true }
-    );
-
-    // Fallback-Timeout: nach 5 Sekunden trotzdem fortfahren
-    setTimeout(function () {
-      onConsent("timeout fallback");
-    }, 5000);
+    // Kein Banner sichtbar, Consent vermutlich bereits erteilt → fortfahren
+    log("Borlabs Banner nicht sichtbar – Consent vermutlich bereits erteilt, fahre fort");
+    callback();
   }
 
   /* ── Init Single Popup ── */
